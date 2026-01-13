@@ -3,6 +3,12 @@ import { useAuth } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import POS from "./pages/POS";
+import DashboardLoyout from "./layouts/DashboardLoyout";
+import InventoryList from "./layouts/InventoryList";
+import SalesPage from './modules/sales/SalesPage';
+import CustomerList from './modules/customers/CustomerList';
+import ReportPage from './modules/reports/ReportPage';
+import Overview from './modules/dashboard/Overview'; 
 
 const PrivateRoute = ({ children }) => {
   const { user } = useAuth();
@@ -18,7 +24,9 @@ export default function App() {
           path="/"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <DashboardLoyout>
+                <Overview />
+              </DashboardLoyout>
             </PrivateRoute>
           }
         />
@@ -30,6 +38,47 @@ export default function App() {
             </PrivateRoute>
           }
         />
+      <Route
+        path="/inventory"
+        element={
+          <PrivateRoute>
+            <DashboardLoyout>
+              <InventoryList />
+            </DashboardLoyout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/sales"
+        element={
+          <PrivateRoute>
+            <DashboardLoyout>
+              <SalesPage/>
+            </DashboardLoyout>
+          </PrivateRoute>
+        }
+      
+      />
+      <Route
+        path="/customers"
+        element={
+          <PrivateRoute>
+            <DashboardLoyout>
+              <CustomerList/>
+            </DashboardLoyout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <PrivateRoute>
+            <DashboardLoyout>
+              <ReportPage />
+            </DashboardLoyout>
+          </PrivateRoute>
+        }
+      />
       </Routes>
     </Router>
   );
