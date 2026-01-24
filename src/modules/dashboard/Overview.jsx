@@ -22,7 +22,7 @@ function Overview() {
         }
       </div>
     </div>
-  )
+  );
 }
 
-export default Overview
+export default Overview;

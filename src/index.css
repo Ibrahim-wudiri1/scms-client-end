@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
-@theme {
-  /* Your custom theme here, e.g.: */
-  --color-primary: #3b82f6;
-  primary: #007aff;
-  accent: #00c9a7;
-  dark: #1e293b;
-      
-}
-@config "./tailwind.config.js";  /* If using the JS file above */
+/* theme: {
+    extend: {
+      colors: {
+        primary: "#007aff",
+        accent: "#00c9a7",
+        dark: "#1e293b",
+      },
+    },
+  }, */
+/* @config "./tailwind.config.js";  If using the JS file above */
