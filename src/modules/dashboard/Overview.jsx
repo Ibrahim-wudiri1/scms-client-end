@@ -1,28 +1,39 @@
-import React from 'react'
+import { useEffect, useState } from "react";
+import axiosClient from "../../api/axiosClient";
+import KpiCard from "./KpiCard";
+import RecentSales from "./RecentSales";
+import LowStock from "./LowStock";
 
-function Overview() {
+export default function OverviewPage() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axiosClient.get("/reports/overview").then((res) => {
+      setData(res.data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <p className="p-4">Loading overview...</p>;
+
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-dark mb-4">Dashboard Overview</h1>
-      <div className="grid grid-cols-4 gap-6">
-        {[
-          {title: "Total Sales", value: "$15,200"},
-          {title: "Products in Stock", value: "436"},
-          {title: "Active Customers", value: "200"},
-          {title: "Suppliers", value: "15"},
-        ].map((stat)=> (
-        <div 
-          key={stat.title}
-          className="bg-white p-4 rounded-lg shadow"
-        >
-          <h2 className="text-sm text-gray-500">{stat.title}</h2>
-          <p className="text-2xl font-semibold text-dark mt-1">{stat.value}</p>
-        </div>
-        ))
-        }
+    <div className="p-4 space-y-6">
+      <h1 className="text-2xl font-bold">Overview</h1>
+
+      {/* KPI GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <KpiCard title="Sales Today" value={`$${data.salesToday}`} />
+        <KpiCard title="Sales This Month" value={`$${data.salesThisMonth}`} />
+        <KpiCard title="Customers" value={data.totalCustomers} />
+        <KpiCard title="Low Stock Items" value={data.lowStockCount} />
+      </div>
+
+      {/* DETAILS */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <RecentSales sales={data.recentSales} />
+        <LowStock products={data.lowStockProducts} />
       </div>
     </div>
   );
 }
-
-export default Overview;
