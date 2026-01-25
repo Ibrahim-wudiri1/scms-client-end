@@ -8,7 +8,7 @@ import DashboardLoyout from "./layouts/DashboardLoyout";
 import InventoryList from "./modules/inventory/InventoryList";
 import SalesPage from './modules/sales/SalesPage';
 import CustomerList from './modules/customers/CustomerList';
-import ReportPage from './modules/reports/ReportPage';
+import ReportPage from './modules/reports/Dashboard';
 import Overview from './modules/dashboard/Overview'; 
 
 // user ? 
