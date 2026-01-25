@@ -1,12 +1,14 @@
 import { useAuth } from "../context/AuthContext";
+import TenantSwitcher from "./TenantSwitcher";
 
-export default function Navbar(){
+export default function Navbar({user, tenant}){
     const {user, logout} = useAuth();
 
     return (
         <header className="bg-white shadow flex justify-between items-center p-4">
             <h2 className="text-lg font-semibold text-dark">Shopping Complex</h2>
             <div className="flex items-center gap-4">
+                 <TenantSwitcher tenants={tenants} />
                 <span className="text-gray-700 text-sm">{user?.name}</span>
                 <button 
                     onClick={logout}
