@@ -3,19 +3,37 @@ import axiosClient from "../../api/axiosClient";
 import KpiCard from "./KpiCard";
 import RecentSales from "./RecentSales";
 import LowStock from "./LowStock";
+import Spinner from "../../components/Spinner";
 
 export default function OverviewPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosClient.get("/reports/overview").then((res) => {
-      setData(res.data);
-      setLoading(false);
-    });
-  }, []);
+  const loadOverview = async () => {
+    try {
+      const res = await axiosClient.get("/reports/overview");
+      setData({
+        salesToday: res.data.salesToday ?? 0,
+        salesThisMonth: res.data.salesThisMonth ?? 0,
+        totalCustomers: res.data.totalCustomers ?? 0,
+        lowStockCount: res.data.lowStockCount ?? 0,
+        recentSales: res.data.recentSales ?? [],
+        lowStockProducts: res.data.lowStockProducts ?? [],
+      });
 
-  if (loading) return <p className="p-4">Loading overview...</p>;
+    } catch (err) {
+      console.error("Failed to load overview", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadOverview();
+}, []);
+
+
+  if (loading) return <Spinner/>;
 
   return (
     <div className="p-4 space-y-6">

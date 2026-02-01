@@ -1,7 +1,7 @@
 import { useTenant } from "../context/TenantContext";
 
 export default function TenantSwitcher({ tenants }) {
-  const { tenant, switchTenant } = useTenant();
+  const { tenant} = useTenant();
 
   return (
     <select

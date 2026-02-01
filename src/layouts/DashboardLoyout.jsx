@@ -15,4 +15,4 @@ function DashboardLoyout({children}) {
   );
 }
 
-export default DashboardLoyout
+export default DashboardLoyout;
