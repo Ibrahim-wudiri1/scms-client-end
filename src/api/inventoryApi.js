@@ -11,8 +11,8 @@ export const inventoryApi = {
         return res.data;
     },
 
-    update: async (id) => {
-        const res = await axiosClient.put(`/products/${id}`);
+    update: async (id, data) => {
+        const res = await axiosClient.put(`/products/${id}`, data);
         return res.data;
     },
 

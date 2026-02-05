@@ -12,14 +12,25 @@ import CustomerList from './modules/customers/CustomerList';
 import ReportPage from './modules/reports/Dashboard';
 import Overview from './modules/dashboard/Overview'; 
 import Spinner from './components/Spinner';
+import { useShop } from "./context/ShopContext";
 
 // user ? 
 // : <Navigate to="/" />
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <Spinner/>;
+  const {activeShop} = useShop();
+
+  if (loading){ 
+    return (
+    <Spinner/>
+  );
+  }
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if(!activeShop){
+    return <p className="p-4">No shop configured</p>;
   }
 
   return children;

@@ -2,25 +2,34 @@ import { useState } from "react";
 import ProductSearch from "./ProductSearch";
 import CartPanel from "./CartPanel";
 import axiosClient from "../../api/axiosClient";
+import { useShop } from "../../context/ShopContext";
 
 export default function SalesPage() {
   const [cart, setCart] = useState([]);
+  const {activeShop} = useShop();
+  const [processing, setProcessing] = useState(false);
+  // const [shops, setShops] = useState([]);
+  // const [selectedShopId, setSelectedShopId] = useState("");
+  // const [selectedPaymentType, setSelectedPaymentType] = useState("");
 
+  const fecthShops = async () =>{
+    const result = await axiosClient.get();
+  }
   const addProduct = (product) => {
     const exists = cart.find((i) => i.id === product.id);
     if (exists) {
       setCart(
         cart.map((i) =>
-          i.id === product.id ? { ...i, qty: i.qty + 1 } : i
+          i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
         )
       );
     } else {
-      setCart([...cart, { ...product, qty: 1, price: product.sellingPrice }]);
+      setCart([...cart, { ...product, quantity: 1, price: product.sellingPrice }]);
     }
   };
 
-  const handleQtyChange = (id, qty) => {
-    setCart(cart.map((i) => (i.id === id ? { ...i, qty } : i)));
+  const handleQtyChange = (id, quantity) => {
+    setCart(cart.map((i) => (i.id === id ? { ...i, quantity } : i)));
   };
 
   const handleRemove = (id) => {
@@ -29,18 +38,27 @@ export default function SalesPage() {
 
   const handleCheckout = async (total) => {
     const saleData = {
-      customerId: null,
-      totalAmount: total,
-      saleItems: cart.map((c) => ({
+      shopId: activeShop.id,
+      paymentType: "CASH", // for now later we enhance
+      items: cart.map((c) => ({
         productId: c.id,
-        quantity: c.qty,
-        sellingPrice: c.price,
+        quantity: c.quantity,
       })),
     };
+    
+    try {
+      setProcessing(true);
 
-    await axiosClient.post("/sales", saleData);
-    alert("Sale completed successfully!");
-    setCart([]);
+      await axiosClient.post("/sales", saleData);
+      alert("Sale completed successfully!");
+      setCart([]);
+
+    } catch (error) {
+      alert(error.response?.data?.message || "Sale failed");
+    } finally{
+      setProcessing(false);
+    }
+   
   };
 
   return (
@@ -64,9 +82,9 @@ export default function SalesPage() {
                 {cart.map((item) => (
                   <tr key={item.id} className="border-b">
                     <td className="p-2">{item.name}</td>
-                    <td className="p-2">{item.qty}</td>
+                    <td className="p-2">{item.quantity}</td>
                     <td className="p-2">${item.price}</td>
-                    <td className="p-2">${(item.qty * item.price).toFixed(2)}</td>
+                    <td className="p-2">${(item.quantity * item.price).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -84,6 +102,7 @@ export default function SalesPage() {
           onQuantityChange={handleQtyChange}
           onRemove={handleRemove}
           onCheckout={handleCheckout}
+          processing={processing}
         />
       </div>
     </div>

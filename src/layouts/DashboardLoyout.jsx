@@ -3,6 +3,7 @@ import Sibebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
 function DashboardLoyout({children}) {
+
   return (
     <div className='flex min-h-screen'>
         <Sibebar/>

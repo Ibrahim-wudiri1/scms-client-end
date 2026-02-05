@@ -9,7 +9,7 @@ export default function LowStock({ products }) {
           {products.map((p) => (
             <li key={p.id} className="flex justify-between text-sm">
               <span>{p.name}</span>
-              <span className="text-red-600 font-semibold">{p.qty}</span>
+              <span className="text-red-600 font-semibold">{p.quantity}</span>
             </li>
           ))}
         </ul>

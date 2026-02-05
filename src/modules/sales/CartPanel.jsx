@@ -1,5 +1,5 @@
-export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout }) {
-  const total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout, processing }) {
+  const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
   return (
     <div className="bg-white rounded-lg shadow p-4 flex flex-col h-full">
@@ -18,8 +18,11 @@ export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout
                 <input
                   type="number"
                   min="1"
-                  value={item.qty}
-                  onChange={(e) => onQuantityChange(item.id, Number(e.target.value))}
+                  value={item.quantity}
+                  onChange={(e) => {
+                    const val = Math.max(1, Number(e.target.value));
+                    onQuantityChange(item.id, val);
+                  }}
                   className="border rounded w-14 p-1 text-center"
                 />
                 <button onClick={() => onRemove(item.id)} className="text-red-500 text-sm">
@@ -38,7 +41,7 @@ export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout
         </div>
         <button
           onClick={() => onCheckout(total)}
-          disabled={cart.length === 0}
+          disabled={cart.length === 0 || processing}
           className="btn-primary w-full mt-3"
         >
           Complete Sale

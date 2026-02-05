@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+import {useShop} from "../../context/ShopContext";
 
 export default function ProductForm({ product, onSave, onClose }) {
+  const {activeShop} = useShop();
   const [form, setForm] = useState({
+    shopId: activeShop.id,
     name: "",
     sku: "",
     costPrice: "",
@@ -11,7 +14,9 @@ export default function ProductForm({ product, onSave, onClose }) {
   });
 
   useEffect(() => {
-    if (product) setForm(product);
+    if (product) {
+      setForm({...product, shopId: product.shopId,});
+    }
   }, [product]);
 
   const handleChange = (e) =>
@@ -19,7 +24,12 @@ export default function ProductForm({ product, onSave, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(form);
+    onSave({
+      ...form,
+      costPrice: Number(form.costPrice),
+      sellingPrice: Number(form.sellingPrice),
+      quantity: Number(form.quantity),
+    });
   };
 
   return (

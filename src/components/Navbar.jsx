@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthContext";
+import ShopSwitcher from "./ShopSwitcher";
 import TenantSwitcher from "./TenantSwitcher";
 
 export default function Navbar({ tenants}){
@@ -9,6 +10,7 @@ export default function Navbar({ tenants}){
             <h2 className="text-lg font-semibold text-dark">Shopping Complex</h2>
             <div className="flex items-center gap-4">
                  {/* <TenantSwitcher tenants={tenants} /> */}
+                 <ShopSwitcher/>
                 <span className="text-gray-700 text-sm">{user?.name}</span>
                 <button 
                     onClick={logout}

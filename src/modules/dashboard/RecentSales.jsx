@@ -9,7 +9,7 @@ export default function RecentSales({ sales }) {
           {sales.map((s) => (
             <li key={s.id} className="flex justify-between text-sm">
               <span>{new Date(s.createdAt).toLocaleDateString()}</span>
-              <span className="font-medium">${s.totalAmount.toFixed(2)}</span>
+              <span className="font-medium">${(s.totalAmount ?? 0).toFixed(2)}</span>
             </li>
           ))}
         </ul>
