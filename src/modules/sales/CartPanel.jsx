@@ -1,3 +1,5 @@
+import "../../styles/colors.css";
+
 export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout, processing }) {
   const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 

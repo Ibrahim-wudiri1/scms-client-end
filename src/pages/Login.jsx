@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import "../styles/colors.css";
 
 export default function Login() {
   const { login } = useAuth();
