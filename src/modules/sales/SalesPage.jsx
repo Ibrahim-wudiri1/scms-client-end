@@ -3,11 +3,13 @@ import ProductSearch from "./ProductSearch";
 import CartPanel from "./CartPanel";
 import axiosClient from "../../api/axiosClient";
 import { useShop } from "../../context/ShopContext";
+import ReceiptModal from "./ReceiptModel";
 
 export default function SalesPage() {
   const [cart, setCart] = useState([]);
   const {activeShop} = useShop();
   const [processing, setProcessing] = useState(false);
+  const [receiptSaleId, SetReceiptSaleId] = useState(null);
   // const [shops, setShops] = useState([]);
   // const [selectedShopId, setSelectedShopId] = useState("");
   // const [selectedPaymentType, setSelectedPaymentType] = useState("");
@@ -43,13 +45,15 @@ export default function SalesPage() {
       items: cart.map((c) => ({
         productId: c.id,
         quantity: c.quantity,
+        price: c.price,
       })),
     };
     
     try {
       setProcessing(true);
 
-      await axiosClient.post("/sales", saleData);
+      const res = await axiosClient.post("/sales", saleData);
+      SetReceiptSaleId(res.data.sale.id);
       alert("Sale completed successfully!");
       setCart([]);
 
@@ -105,6 +109,13 @@ export default function SalesPage() {
           processing={processing}
         />
       </div>
+
+      {receiptSaleId && (
+        <ReceiptModal
+          saleId={receiptSaleId}
+          onClose={() => SetReceiptSaleId(null)}
+        />
+      )}
     </div>
   );
 }

@@ -1,0 +1,28 @@
+/* 80mm thermal receipt */
+.receipt-container {
+  width: 80mm;
+  padding: 10px;
+  font-family: monospace;
+}
+
+/* PRINT MODE */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .receipt-container,
+  .receipt-container * {
+    visibility: visible;
+  }
+
+  .receipt-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .receipt-actions {
+    display: none;
+  }
+}
