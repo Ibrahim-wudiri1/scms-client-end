@@ -3,7 +3,7 @@ import ProductSearch from "./ProductSearch";
 import CartPanel from "./CartPanel";
 import axiosClient from "../../api/axiosClient";
 import { useShop } from "../../context/ShopContext";
-import ReceiptModal from "./ReceiptModel";
+import ReceiptModal from "./ReceiptModal";
 
 export default function SalesPage() {
   const [cart, setCart] = useState([]);
@@ -39,15 +39,20 @@ export default function SalesPage() {
   };
 
   const handleCheckout = async (total) => {
+    console.log(cart);
     const saleData = {
       shopId: activeShop.id,
-      paymentType: "CASH", // for now later we enhance
       items: cart.map((c) => ({
         productId: c.id,
         quantity: c.quantity,
         price: c.price,
       })),
+      paymentType: "CASH", // for now later we enhance
+
     };
+
+    console.log("SaleData: ", saleData);
+    console.log("Cart: ", cart);
     
     try {
       setProcessing(true);
@@ -58,6 +63,7 @@ export default function SalesPage() {
       setCart([]);
 
     } catch (error) {
+      console.log(`Error: ${error}`);
       alert(error.response?.data?.message || "Sale failed");
     } finally{
       setProcessing(false);

@@ -9,7 +9,8 @@ export const ShopProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosClient.get("/shops").then((res) => {
+    try {
+      axiosClient.get("/shops").then((res) => {
       setShops(res.data);
 
       const savedShop = localStorage.getItem("activeShop");
@@ -20,6 +21,10 @@ export const ShopProvider = ({ children }) => {
         localStorage.setItem("activeShop", JSON.stringify(res.data[0]));
       }
     }).finally(() => setLoading(false));
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+    
   }, []);
 
   const switchShop =(shop) =>{

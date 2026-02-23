@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import DashboardLoyout from "./layouts/DashboardLoyout";
 import InventoryList from "./modules/inventory/InventoryList";
 import SalesPage from './modules/sales/SalesPage';
+import SalesHistoryPage from './modules/sales/SalesHistoryPage';
 import CustomerList from './modules/customers/CustomerList';
 import ReportPage from './modules/reports/Dashboard';
 import Overview from './modules/dashboard/Overview'; 
@@ -26,7 +27,7 @@ const PrivateRoute = ({ children }) => {
   );
   }
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if(!activeShop){
@@ -40,10 +41,11 @@ const PrivateRoute = ({ children }) => {
 export default function App() {
   return (
     <AuthProvider>
-      <TenantProvider>
+      {/* <TenantProvider> */}
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route
               path="/dashboard"
               element={
@@ -84,6 +86,17 @@ export default function App() {
           
           />
           <Route
+            path="/saleshistory"
+            element={
+              <PrivateRoute>
+                <DashboardLoyout>
+                  <SalesHistoryPage/>
+                </DashboardLoyout>
+              </PrivateRoute>
+            }
+          
+          />
+          <Route
             path="/customers"
             element={
               <PrivateRoute>
@@ -105,7 +118,7 @@ export default function App() {
           />
           </Routes>
         </Router>
-    </TenantProvider>
+    {/* </TenantProvider> */}
     </AuthProvider>
   );
 }

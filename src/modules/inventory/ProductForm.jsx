@@ -24,12 +24,17 @@ export default function ProductForm({ product, onSave, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({
+    try {
+       onSave({
       ...form,
       costPrice: Number(form.costPrice),
       sellingPrice: Number(form.sellingPrice),
       quantity: Number(form.quantity),
     });
+    } catch (error) {
+      alert(error?.data?.message || "server fail");
+    }
+   
   };
 
   return (
