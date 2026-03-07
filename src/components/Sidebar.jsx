@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import '../styles/sidebar.css';
 import {
   LayoutDashboard,
   Package,
@@ -9,22 +10,40 @@ import {
   Menu,
 } from "lucide-react";
 
-const menuItems = [
-  { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
-  { name: "Inventory", path: "/inventory", icon: <Package size={18} /> },
-  { name: "Sales", path: "/sales", icon: <ShoppingCart size={18} /> },
-  { name: "Sales History", path: "/saleshistory", icon: <ShoppingCart size={18} /> },
-  { name: "Customers", path: "/customers", icon: <Users size={18} /> },
-  { name: "Reports", path: "/reports", icon: <BarChart2 size={18} /> },
-];
+const menuByRole = {
+  SUPER_ADMIN: [
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Inventory", path: "/inventory", icon: <Package size={18} /> },
+    { name: "Sales", path: "/sales", icon: <ShoppingCart size={18} /> },
+    { name: "Sales History", path: "/saleshistory", icon: <ShoppingCart size={18} /> },
+    { name: "Customers", path: "/customers", icon: <Users size={18} /> },
+    { name: "Reports", path: "/reports", icon: <BarChart2 size={18} /> },
+  ],
 
-export default function Sidebar() {
+  MANAGER: [
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Inventory", path: "/inventory", icon: <Package size={18} /> },
+    { name: "Sales", path: "/sales", icon: <ShoppingCart size={18} /> },
+    { name: "Sales History", path: "/saleshistory", icon: <ShoppingCart size={18} /> },
+    { name: "Reports", path: "/reports", icon: <BarChart2 size={18} /> },
+  ],
+
+  CASHIER: [
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Sales", path: "/sales", icon: <ShoppingCart size={18} /> },
+    { name: "Sales History", path: "/saleshistory", icon: <ShoppingCart size={18} /> },
+    { name: "Inventory", path: "/inventory", icon: <Package size={18} /> },
+  ],
+};
+
+export default function Sidebar({ role }) {
+  const menuItems = menuByRole[role] || [];
   const [open, setOpen] = useState(true);
   const location = useLocation();
 
   return (
     <div
-      className={`bg-dark text-white min-h-screen transition-all duration-300 ${
+      className={`sidebar min-h-screen transition-all duration-300 ${
         open ? "w-56" : "w-16"
       }`}
     >
@@ -40,7 +59,7 @@ export default function Sidebar() {
           <Link
             key={item.name}
             to={item.path}
-            className={`flex items-center gap-3 px-4 py-2 rounded-md m-2 transition ${
+            className={`menu-item flex items-center gap-3 px-4 py-2 rounded-md m-2 transition ${
               location.pathname === item.path
                 ? "bg-primary text-white"
                 : "text-gray-300 hover:bg-gray-700"

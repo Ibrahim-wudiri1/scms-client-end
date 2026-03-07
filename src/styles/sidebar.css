@@ -1,0 +1,27 @@
+.btn-primary{
+    background: #007aff;
+    cursor: pointer;
+}
+.btn-accent{
+    background: #00c9a7;
+    cursor: pointer;
+}
+.btn-dark{
+    background: #1e293b;
+    cursor: pointer;
+}
+.sidebar {
+    background: #1e293b;
+    color: #cbd5e1;
+    min-height: 100vh;
+    padding: 20px;
+}
+.sidebar .menu-item {
+    display: flex;
+    /* align-items: center; */
+    gap: 10px;
+    /* padding: 10px 15px; */
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+}
+
