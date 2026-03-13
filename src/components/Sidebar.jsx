@@ -14,6 +14,17 @@ const menuByRole = {
   SUPER_ADMIN: [
     { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
     { name: "Inventory", path: "/inventory", icon: <Package size={18} /> },
+    { name: "Users", path: "/users", icon: <Users size={18} /> },
+    { name: "Sales", path: "/sales", icon: <ShoppingCart size={18} /> },
+    { name: "Sales History", path: "/saleshistory", icon: <ShoppingCart size={18} /> },
+    { name: "Customers", path: "/customers", icon: <Users size={18} /> },
+    { name: "Reports", path: "/reports", icon: <BarChart2 size={18} /> },
+  ],
+
+  TENANT_ADMIN: [
+    { name: "Dashboard", path: "/dashboard", icon: <LayoutDashboard size={18} /> },
+    { name: "Inventory", path: "/inventory", icon: <Package size={18} /> },
+    { name: "Users", path: "/users", icon: <Users size={18} /> },
     { name: "Sales", path: "/sales", icon: <ShoppingCart size={18} /> },
     { name: "Sales History", path: "/saleshistory", icon: <ShoppingCart size={18} /> },
     { name: "Customers", path: "/customers", icon: <Users size={18} /> },

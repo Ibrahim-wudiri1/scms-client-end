@@ -1,6 +1,6 @@
 import "../../styles/colors.css";
 
-export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout, processing }) {
+export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout, processing, shopId, setPaymentType, paymentType }) {
   const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
   return (
@@ -17,16 +17,23 @@ export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout
                 <p className="text-sm text-gray-500">${item.price.toFixed(2)}</p>
               </div>
               <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  min="1"
-                  value={item.quantity}
-                  onChange={(e) => {
-                    const val = Math.max(1, Number(e.target.value));
-                    onQuantityChange(item.id, val);
-                  }}
-                  className="border rounded w-14 p-1 text-center"
-                />
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => onQuantityChange(item.id, item.quantity - 1)}
+                    className="px-2 border rounded"
+                  >
+                    -
+                  </button>
+
+                  <span className="w-6 text-center">{item.quantity}</span>
+
+                  <button
+                    onClick={() => onQuantityChange(item.id, item.quantity + 1)}
+                    className="px-2 border rounded"
+                  >
+                    +
+                  </button>
+                </div>
                 <button onClick={() => onRemove(item.id)} className="text-red-500 text-sm">
                   ✕
                 </button>
@@ -41,12 +48,26 @@ export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout
           <span>Total</span>
           <span>${total.toFixed(2)}</span>
         </div>
-        <button
+          <div className="mt-3">
+            <label className="text-sm font-medium">Payment Method</label>
+
+            <select
+              value={paymentType}
+              onChange={(e) => setPaymentType(e.target.value)}
+              className="border rounded w-full p-2 mt-1"
+            >
+              <option value="CASH">Cash</option>
+              <option value="POS">POS</option>
+              <option value="TRANSFER">Transfer</option>
+            </select>
+          </div>
+
+       <button
           onClick={() => onCheckout(total)}
           disabled={cart.length === 0 || processing}
-          className="btn-primary w-full mt-3"
+          className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-3 rounded text-lg font-semibold"
         >
-          Complete Sale
+          {processing ? "Processing..." : "Complete Sale"}
         </button>
       </div>
     </div>

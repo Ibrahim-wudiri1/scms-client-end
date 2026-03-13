@@ -10,10 +10,17 @@ export default function SalesHistoryPage() {
 
   useEffect(() => {
     if (!activeShop) return;
-
-    axiosClient
-      .get(`/sales?shopId=${activeShop.id}`)
-      .then((res) => setSales(res.data));
+    try {
+       axiosClient
+        .get(`/sales?shopId=${activeShop.id}`)
+        .then((res) => {
+          console.log(res.data);
+          setSales(res.data);
+        } );
+    } catch (error) {
+      console.error("Error: ", error?.data?.message);
+    }
+   
   }, [activeShop]);
 
   if (!activeShop) return null;

@@ -39,7 +39,7 @@ export default function ReceiptModal({ saleId, onClose }) {
             </tr>
           </thead>
           <tbody>
-            {sale.saleItems.map((item) => (
+            {sale.items.map((item) => (
               <tr key={item.id}>
                 <td>{item.product.name}</td>
                 <td className="text-center">{item.quantity}</td>
@@ -60,7 +60,7 @@ export default function ReceiptModal({ saleId, onClose }) {
         </div>
 
         <p className="text-xs mt-2 text-center">
-          Payment: {sale.paymentMethod}
+          Payment: {sale.paymentType}
         </p>
 
         <p className="text-xs mt-1 text-center">
