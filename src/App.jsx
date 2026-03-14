@@ -13,7 +13,7 @@ import CustomerList from './modules/customers/CustomerList';
 import ReportPage from './modules/reports/Dashboard';
 import Overview from './modules/dashboard/Overview'; 
 import Spinner from './components/Spinner';
-import Users from './modules/users/users';
+import Users from './modules/users/UsersPage';
 import { useShop } from "./context/ShopContext";
 
 // user ? 
