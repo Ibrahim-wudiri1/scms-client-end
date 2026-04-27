@@ -1,0 +1,100 @@
+/* 80mm thermal receipt */
+.receipt-container {
+  width: 80mm;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #10b981;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #059669;
+}
+
+/* PRINT MODE */
+@media print {
+  * {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    background: white !important;
+    color: black !important;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Hide everything except receipt */
+  body > *:not(.receipt-modal-print) {
+    display: none !important;
+  }
+
+  .receipt-modal-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm;
+  }
+
+  .receipt-container {
+    width: 80mm;
+    padding: 10px;
+    margin: 0;
+    box-shadow: none;
+    page-break-after: avoid;
+  }
+
+  .receipt-container,
+  .receipt-container * {
+    visibility: visible;
+    page-break-inside: avoid;
+  }
+
+  /* Hide interactive elements when printing */
+  .receipt-actions {
+    display: none !important;
+  }
+
+  button {
+    display: none !important;
+  }
+
+  /* Ensure proper spacing in print */
+  hr {
+    border: 1px solid black;
+    margin: 5px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  td,
+  th {
+    padding: 2px 0;
+    font-size: 11pt;
+  }
+
+  /* Optimize for 80mm thermal printer */
+  @page {
+    size: 80mm auto;
+    margin: 0;
+    padding: 0;
+  }
+}
+

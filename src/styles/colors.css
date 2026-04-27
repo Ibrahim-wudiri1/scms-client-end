@@ -1,0 +1,13 @@
+.btn-primary{
+    background: #007aff;
+    cursor: pointer;
+}
+.btn-accent{
+    background: #00c9a7;
+    cursor: pointer;
+}
+.btn-dark{
+    background: #1e293b;
+    cursor: pointer;
+}
+
