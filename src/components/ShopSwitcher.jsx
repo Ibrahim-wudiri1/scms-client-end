@@ -13,7 +13,7 @@ export default function ShopSwitcher() {
         switchShop(shop);
         window.location.reload(); // simple + safe
       }}
-      className="border rounded px-2 py-1 text-sm bg-white"
+      className="border rounded px-2 py-1 text-sm bg-gray"
     >
       {shops.map((shop) => (
         <option key={shop.id} value={shop.id}>

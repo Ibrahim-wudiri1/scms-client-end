@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import TenantHeader from "../modules/dashboard/components/TenantHeader";
 import SubscriptionContainer from "../modules/dashboard/components/SubscriptionContainer";
+import SyncStatus from "../components/SyncStatus";
 import { useAuth } from '../context/AuthContext';
 
 function DashboardLayout({children}) {
@@ -19,6 +20,8 @@ function DashboardLayout({children}) {
         <Sidebar role={user?.role} />
         <div className="flex-1 flex flex-col">
             <Navbar user={user} />
+            {/* Sync status indicator */}
+            <SyncStatus />
             {/* Subscription management layer */}
             <SubscriptionContainer />
             {/* Tenant header with subscription status */}

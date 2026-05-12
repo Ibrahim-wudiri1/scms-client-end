@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import axiosClient from "../../api/axiosClient";
+import { useShop } from "../../context/ShopContext";
 
 export default function ProductSearch({ onAdd }) {
+  const { activeShop } = useShop();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ export default function ProductSearch({ onAdd }) {
       try {
         setLoading(true);
         setError("");
-        const res = await axiosClient.get(`/products?search=${query}`);
+        const res = await axiosClient.get(`/products?shopId=${activeShop?.id}&search=${query}`);
         const productData = Array.isArray(res.data) ? res.data : res.data?.products || [];
         setResults(productData);
         

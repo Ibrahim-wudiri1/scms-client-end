@@ -11,12 +11,12 @@ export default function EditUserModal({ category, close, refresh }) {
     e.preventDefault();
 
     try {
-      await axiosClient.put(`/category/${category.id}`, form);
+      await axiosClient.put(`/shops/${category.shopId}/categories/${category.id}`, form);
       alert("Category updated successfully.");
       refresh();
       close();
     } catch (err) {
-      alert("Failed to update category");
+      alert(err.response?.data?.message || "Failed to update category");
     }
   };
 

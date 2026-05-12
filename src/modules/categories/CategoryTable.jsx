@@ -1,28 +1,28 @@
 import { useState } from "react";
+import axiosClient from "../../api/axiosClient";
 import EditCategory from "./EditCategory";
 
-export default function CategoriesTable({ categories, refresh }) {
-
+export default function CategoriesTable({ categories, refresh, shopId }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  const deleteCategory = async (category) => {
+    if (!shopId) {
+      return alert("No shop selected for delete action.");
+    }
 
-    const toggleUser = async (user) => {
+    const confirmDelete = window.confirm(
+      `Delete category "${category.name}"? This cannot be undone.`
+    );
+    if (!confirmDelete) return;
 
-        try{
-
-        await axiosClient.put(`/users/${user.id}`,{
-        isActive: !user.isActive
-        });
-
-        refresh();
-
-        }catch(err){
-
-        alert("Failed to update user");
-
-        }
-
-    };
+    try {
+      await axiosClient.delete(`/shops/${shopId}/categories/${category.id}`);
+      alert("Category deleted successfully.");
+      refresh();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete category");
+    }
+  };
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
 
@@ -51,12 +51,18 @@ export default function CategoriesTable({ categories, refresh }) {
             </td>
 
             <td className="p-3 text-right space-x-3">
-                <button
-                onClick={()=>setSelectedCategory(category)}
+              <button
+                onClick={() => setSelectedCategory(category)}
                 className="text-blue-600 hover:underline"
-                >
+              >
                 Edit
-                </button>
+              </button>
+              <button
+                onClick={() => deleteCategory(category)}
+                className="text-red-600 hover:underline"
+              >
+                Delete
+              </button>
             </td>
 
             </tr>

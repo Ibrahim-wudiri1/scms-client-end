@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
 import CategoriesTable from "./CategoryTable";
 import CreateCategoryModal from "./AddCategoryModal";
-
 import Spinner from "../../components/Spinner";
+import { useShop } from "../../context/ShopContext";
 
 export default function categoriesPage() {
 
+  const { activeShop } = useShop();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [search, setSearch] = useState("");
 
   const loadCategories = async () => {
+    if (!activeShop) return;
     try{
-      const res = await axiosClient.get("/category");
+      const res = await axiosClient.get(`/shops/${activeShop.id}/categories`);
       console.log("Categroy: ", res.data);
       setCategories(res.data);
     }catch(err){
@@ -27,7 +29,7 @@ export default function categoriesPage() {
 
   useEffect(()=>{
     loadCategories();
-  },[]);
+  },[activeShop]);
 
   const filteredCategories = categories.filter((c)=>
     c.name.toLowerCase().includes(search.toLowerCase())
@@ -62,7 +64,7 @@ export default function categoriesPage() {
       className="border p-2 rounded w-64"
       />
 
-      <CategoriesTable categories={filteredCategories} refresh={loadCategories}/>
+      <CategoriesTable categories={filteredCategories} refresh={loadCategories} shopId={activeShop?.id} />
 
       {showCreate && (
         <CreateCategoryModal
