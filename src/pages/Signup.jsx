@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 
 export default function Signup() {
@@ -68,7 +69,7 @@ export default function Signup() {
           ShopSys
         </h1>
         <p className="text-center text-gray-500 mb-6">
-          Create your account
+          Create your account and manage your business from anywhere.
         </p>
 
         {/* Error */}
@@ -82,7 +83,7 @@ export default function Signup() {
         {step === 1 && (
           <>
             <label className="block mb-2 text-sm font-medium">
-              Business / Shop Name
+              Business Name
             </label>
             <input
               type="text"
@@ -167,6 +168,12 @@ export default function Signup() {
         {/* Footer */}
         <p className="text-center text-xs text-gray-400 mt-6">
           14-day free trial • No card required
+        </p>
+        <p className="text-center text-sm text-gray-500 mt-4">
+          Already have an account?{' '}
+          <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            Sign in
+          </Link>
         </p>
       </motion.div>
     </div>

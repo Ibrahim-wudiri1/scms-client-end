@@ -1,14 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/colors.css";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, rememberedEmail } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+    }
+  }, [rememberedEmail]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +26,7 @@ export default function Login() {
     try {
       setLoading(true);
       setError("");
-      await login(email, password);
+      await login(email, password, rememberMe);
       window.location.href = "/dashboard";
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
@@ -72,6 +80,24 @@ export default function Login() {
             placeholder="••••••••"
           />
 
+          <div className="flex items-center justify-between mb-4">
+            <label className="inline-flex items-center gap-2 text-sm text-gray-600">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+              />
+              Remember me
+            </label>
+            <Link
+              to="/signup"
+              className="text-sm text-indigo-600 hover:text-indigo-700"
+            >
+              Don't have an account?
+            </Link>
+          </div>
+
           <button
             type="submit"
             disabled={loading}
@@ -80,6 +106,10 @@ export default function Login() {
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
+
+        <p className="text-center text-sm text-gray-500 mt-5">
+          Secure login with persistent access for trusted devices.
+        </p>
 
         {/* Footer */}
         <p className="text-center text-xs text-gray-400 mt-6">

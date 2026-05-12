@@ -8,7 +8,7 @@ const axiosClient = axios.create({
 // Request interceptor - add token and handle offline mode
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
     const activeShop = localStorage.getItem("activeShop");
     
     if (token) {
@@ -38,6 +38,7 @@ axiosClient.interceptors.response.use(
     // Handle 401 - unauthorized
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
       window.location.href = "/login";
     }
     
