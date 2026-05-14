@@ -80,7 +80,16 @@ export default function SalesPage() {
 
     } catch (error) {
       console.error("Error:", error);
-      const errorMsg = error.response?.data?.message || error.message || "Failed to complete sale. Please try again.";
+      let errorMsg = "Failed to complete sale. Please try again.";
+      
+      if (error.response?.data?.message) {
+        errorMsg = typeof error.response.data.message === 'string' 
+          ? error.response.data.message 
+          : JSON.stringify(error.response.data.message);
+      } else if (error.message && typeof error.message === 'string') {
+        errorMsg = error.message;
+      }
+      
       setErrorMessage(errorMsg);
     } finally {
       setProcessing(false);
@@ -88,7 +97,7 @@ export default function SalesPage() {
   };
 
   return (
-    <div className="grid grid-cols-12 gap-4 p-4 h-[calc(100vh-80px)]">
+    <div className="grid grid-cols-12 gap-4 p-4 min-h-screen md:h-[calc(100vh-80px)]">
       {/* Success/Error Messages */}
       {successMessage && (
         <div className="col-span-12 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
@@ -102,40 +111,42 @@ export default function SalesPage() {
       )}
 
       {/* Left side: Search and Product quick add */}
-      <div className="col-span-8 bg-white rounded-lg shadow p-4">
+      <div className="col-span-12 md:col-span-8 lg:col-span-8 bg-white rounded-lg shadow p-4 overflow-y-auto">
         <h1 className="text-2xl font-bold mb-4">Point of Sale</h1>
         <ProductSearch onAdd={addProduct} />
         <div className="mt-3">
           {cart.length > 0 ? (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left">
-                  <th className="p-2">Product</th>
-                  <th className="p-2">Qty</th>
-                  <th className="p-2">Price</th>
-                  <th className="p-2">Total</th>
-                  <th className="p-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {cart.map((item) => (
-                  <tr key={item.id} className="border-b hover:bg-gray-50">
-                    <td className="p-2 font-medium">{item.name}</td>
-                    <td className="p-2 text-center">{item.quantity}</td>
-                    <td className="p-2 text-right">₦{item.price.toFixed(2)}</td>
-                    <td className="p-2 text-right font-semibold">₦{(item.quantity * item.price).toFixed(2)}</td>
-                    <td className="p-2 text-right">
-                      <button
-                        onClick={() => handleRemove(item.id)}
-                        className="text-red-500 hover:text-red-700 text-sm font-bold"
-                      >
-                        ✕
-                      </button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b text-left">
+                    <th className="p-2">Product</th>
+                    <th className="p-2">Qty</th>
+                    <th className="p-2">Price</th>
+                    <th className="p-2">Total</th>
+                    <th className="p-2"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {cart.map((item) => (
+                    <tr key={item.id} className="border-b hover:bg-gray-50">
+                      <td className="p-2 font-medium">{item.name}</td>
+                      <td className="p-2 text-center">{item.quantity}</td>
+                      <td className="p-2 text-right">₦{item.price.toFixed(2)}</td>
+                      <td className="p-2 text-right font-semibold">₦{(item.quantity * item.price).toFixed(2)}</td>
+                      <td className="p-2 text-right">
+                        <button
+                          onClick={() => handleRemove(item.id)}
+                          className="text-red-500 hover:text-red-700 text-sm font-bold"
+                        >
+                          ✕
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <p className="text-gray-500 text-center py-10">Start adding products to cart</p>
           )}
@@ -143,7 +154,7 @@ export default function SalesPage() {
       </div>
 
       {/* Right side: Cart summary */}
-      <div className="col-span-4 h-full">
+      <div className="col-span-12 md:col-span-4 lg:col-span-4">
         <CartPanel
           cart={cart}
           onQuantityChange={handleQtyChange}

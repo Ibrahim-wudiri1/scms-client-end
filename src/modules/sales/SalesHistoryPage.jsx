@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
 import { useShop } from "../../context/ShopContext";
 import ReceiptModal from "./ReceiptModal";
+import { formatNaira } from "../../utils/formatters";
 
 export default function SalesHistoryPage() {
   const { activeShop } = useShop();
@@ -88,7 +89,7 @@ export default function SalesHistoryPage() {
                       </span>
                     </td>
                     <td className="p-3 text-right font-semibold">
-                      ₦{sale.totalAmount.toFixed(2)}
+                      {formatNaira(sale.totalAmount)}
                     </td>
                     <td className="p-3 text-center">
                       <button
@@ -125,7 +126,7 @@ export default function SalesHistoryPage() {
                     {sale.cashier?.name || "Cashier"}
                   </span>
                   <span className="font-bold text-lg">
-                    ₦{sale.totalAmount.toFixed(2)}
+                    {formatNaira(sale.totalAmount)}
                   </span>
                 </div>
 

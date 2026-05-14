@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
 import "./receipt.css";
+import { formatNaira } from "../../utils/formatters";
 
 export default function ReceiptModal({ saleId, onClose }) {
   const [sale, setSale] = useState(null);
@@ -107,7 +108,7 @@ export default function ReceiptModal({ saleId, onClose }) {
                   <td className="py-1">{item.product?.name || "Unknown Product"}</td>
                   <td className="text-center py-1">{item.quantity}</td>
                   <td className="text-right py-1">
-                    ₦{(item.quantity * item.price).toFixed(2)}
+                    {formatNaira(item.quantity * item.price)}
                   </td>
                 </tr>
               ))
@@ -123,10 +124,9 @@ export default function ReceiptModal({ saleId, onClose }) {
 
         <hr className="my-2" />
 
-        {/* TOTAL */}
         <div className="flex justify-between font-bold text-lg">
           <span>Total</span>
-          <span>₦{sale.totalAmount.toFixed(2)}</span>
+          <span>{formatNaira(sale.totalAmount)}</span>
         </div>
 
         {/* PAYMENT INFO */}

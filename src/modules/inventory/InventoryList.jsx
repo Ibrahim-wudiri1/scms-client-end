@@ -3,6 +3,7 @@ import {inventoryApi} from "../../api/inventoryApi";
 import ProductForm from "./ProductForm";
 import InventoryCard from "./InventoryCard";
 import {Plus} from "lucide-react";
+import { formatNaira } from "../../utils/formatters";
 
 function InventoryList() {
   const [products, setProducts] = useState([]);
@@ -67,7 +68,7 @@ function InventoryList() {
                 <td className="p-3">{p.name}</td>
                 <td className="p-3">{p.sku}</td>
                 <td className="p-3">{p.inventory?.currentQty || 0}</td>
-                <td className="p-3">₦{p.sellingPrice}</td>
+                <td className="p-3">{formatNaira(p.sellingPrice)}</td>
                 <td className="p-3 flex gap-2">
                   <button
                     onClick={() =>{

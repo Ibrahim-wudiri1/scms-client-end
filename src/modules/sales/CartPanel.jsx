@@ -1,4 +1,5 @@
 import "../../styles/colors.css";
+import { formatNaira } from "../../utils/formatters";
 
 export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout, processing, shopId, setPaymentType, paymentType }) {
   const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
@@ -14,7 +15,7 @@ export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout
             <div key={item.id} className="flex justify-between items-center py-2 border-b last:border-none">
               <div>
                 <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-gray-500">₦{item.price.toFixed(2)}</p>
+                <p className="text-sm text-gray-500">{formatNaira(item.price)}</p>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1">
@@ -46,7 +47,7 @@ export default function CartPanel({ cart, onQuantityChange, onRemove, onCheckout
       <div className="mt-3 border-t pt-2">
         <div className="flex justify-between font-semibold text-lg">
           <span>Total</span>
-          <span>₦{total.toFixed(2)}</span>
+          <span>{formatNaira(total)}</span>
         </div>
           <div className="mt-3">
             <label className="text-sm font-medium">Payment Method</label>

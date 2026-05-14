@@ -8,6 +8,7 @@ import KpiCard from "./KpiCard";
 import RecentSales from "./RecentSales";
 import LowStock from "./LowStock";
 import SalesChart from "./SalesChart";
+import { formatNaira } from "../../utils/formatters";
 
 export default function OverviewPage() {
   const [data, setData] = useState(null);
@@ -53,8 +54,8 @@ export default function OverviewPage() {
 
       {/* KPI GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard title="Sales Today" value={`$${data.salesToday}`} />
-        <KpiCard title="Sales This Month" value={`$${data.salesThisMonth}`} />
+        <KpiCard title="Sales Today" value={formatNaira(data.salesToday)} />
+        <KpiCard title="Sales This Month" value={formatNaira(data.salesThisMonth)} />
         {(role === "SUPER_ADMIN" || role==="TENANT_ADMIN"|| role === "MANAGER") && (
           <KpiCard title="Customers" value={data.totalCustomers} />
         )}

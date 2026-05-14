@@ -1,3 +1,5 @@
+import { formatNaira } from "../../utils/formatters";
+
 export default function SalesTable({ items }) {
   return (
     <div className="bg-white rounded-lg shadow overflow-x-auto">
@@ -14,7 +16,7 @@ export default function SalesTable({ items }) {
             <tr key={idx} className="border-t">
               <td className="p-3">{i.product.name}</td>
               <td className="p-3">{i.quantitySold}</td>
-              {/* <td className="p-3">${i.revenue.toFixed(2)}</td> */}
+              <td className="p-3">{formatNaira(i.revenue || 0)}</td>
             </tr>
           ))}
         </tbody>

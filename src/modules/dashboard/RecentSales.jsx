@@ -1,3 +1,5 @@
+import { formatNaira } from "../../utils/formatters";
+
 export default function RecentSales({ sales }) {
   return (
     <div className="bg-white rounded-xl shadow p-4">
@@ -9,7 +11,7 @@ export default function RecentSales({ sales }) {
           {sales.map((s) => (
             <li key={s.id} className="flex justify-between text-sm">
               <span>{new Date(s.createdAt).toLocaleDateString()}</span>
-              <span className="font-medium">${(s.totalAmount ?? 0).toFixed(2)}</span>
+              <span className="font-medium">{formatNaira(s.totalAmount ?? 0)}</span>
             </li>
           ))}
         </ul>

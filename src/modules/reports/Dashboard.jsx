@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { reportApi } from "../../api/reportApi";
 import StatCard from "./StatCard";
 import SalesTable from "./SalesTable";
+import { formatNaira } from "../../utils/formatters";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -40,11 +41,11 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard 
           title="Sales Today" 
-          value={`$${Number(data.salesToday || 0).toFixed(2)}`} 
+          value={formatNaira(data.salesToday || 0)} 
         />
         <StatCard 
           title="Sales This Month" 
-          value={`$${Number(data.salesMonth || 0).toFixed(2)}`} 
+          value={formatNaira(data.salesMonth || 0)} 
         />
         <StatCard 
           title="Total Customers" 

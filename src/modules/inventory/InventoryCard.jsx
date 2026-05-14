@@ -1,3 +1,5 @@
+import { formatNaira } from "../../utils/formatters";
+
 export default function InventoryCard({ product, onEdit, onDelete }) {
   return (
     <div className="bg-white shadow-sm rounded-lg p-4 flex flex-col">
@@ -5,7 +7,7 @@ export default function InventoryCard({ product, onEdit, onDelete }) {
       <p className="text-sm text-gray-500">SKU: {product.sku}</p>
       <div className="flex justify-between mt-2 text-sm">
         <span>Stock: {product.inventory?.currentQty ?? 0}</span>
-        <span className="font-medium text-primary">₦{product.sellingPrice}</span>
+        <span className="font-medium text-primary">{formatNaira(product.sellingPrice)}</span>
       </div>
       <div className="flex gap-2 mt-3">
         <button
