@@ -50,43 +50,73 @@ Sign Up Free
 {/* MOBILE DRAWER */}
 
 <AnimatePresence>
+  {open && (
+    <>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40"
+        onClick={() => setOpen(false)}
+      />
 
-{open && (
+      <motion.div
+        initial={{ x: "-100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "-100%" }}
+        transition={{ type: "spring", stiffness: 260, damping: 24 }}
+        className="fixed inset-y-0 left-0 z-50 w-72 sm:w-80 bg-white dark:bg-slate-950 shadow-2xl p-6"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <span className="text-lg font-semibold">Menu</span>
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            className="p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <X />
+          </button>
+        </div>
 
-<motion.div
-initial={{ x:"100%" }}
-animate={{ x:0 }}
-exit={{ x:"100%" }}
-className="fixed top-0 right-0 w-64 h-full bg-white dark:bg-gray-900 shadow-lg p-6"
->
+        <div className="flex flex-col gap-4">
+          <a href="#features" onClick={() => setOpen(false)} className="text-lg">
+            Features
+          </a>
+          <a href="#pricing" onClick={() => setOpen(false)} className="text-lg">
+            Pricing
+          </a>
+          <a href="#faq" onClick={() => setOpen(false)} className="text-lg">
+            FAQ
+          </a>
 
-<button onClick={()=>setOpen(false)} className="mb-6">
-<X/>
-</button>
+          <button
+            onClick={toggleDark}
+            className="flex gap-2 items-center py-3 px-4 rounded border border-slate-200 dark:border-slate-700"
+          >
+            {dark ? <Sun /> : <Moon />} Toggle Mode
+          </button>
 
-<div className="flex flex-col gap-4">
+          <button
+            onClick={() => {
+              setOpen(false);
+              window.location.href = "/login";
+            }}
+            className="w-full py-3 rounded border border-slate-200 text-left"
+          >
+            Sign In
+          </button>
 
-<a href="#features" onClick={()=>setOpen(false)}>Features</a>
-<a href="#pricing" onClick={()=>setOpen(false)}>Pricing</a>
-<a href="#faq" onClick={()=>setOpen(false)}>FAQ</a>
-
-<button onClick={toggleDark} className="flex gap-2 items-center">
-{dark ? <Sun/> : <Moon/>} Toggle Mode
-</button>
-
-<a
-href="#signup"
-className="bg-emerald-500 text-white py-2 rounded text-center"
->
-Get Started
-</a>
-
-</div>
-
-</motion.div>
-
-)}
-
+          <a
+            href="/signup"
+            className="block w-full text-center bg-emerald-500 text-white py-3 rounded"
+          >
+            Get Started
+          </a>
+        </div>
+      </motion.div>
+    </>
+  )}
 </AnimatePresence>
 
 </nav>

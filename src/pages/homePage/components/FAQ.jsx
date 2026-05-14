@@ -66,7 +66,7 @@ className="text-gray-600 dark:text-gray-300 mt-2 overflow-hidden"
 
 <div className="text-center mt-10">
 <a
-href="#signup"
+href="/signup"
 className="bg-emerald-500 px-6 py-3 text-white rounded"
 >
 Start Free Trial

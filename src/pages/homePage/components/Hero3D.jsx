@@ -10,10 +10,10 @@ export default function Hero3D({ setDemoOpen }) {
         const y = (e.clientX / window.innerWidth - 0.5) * 10;
         setRotate({ x, y });
       }}
-      className="h-screen flex items-center justify-center text-center"
+      className="min-h-[80vh] flex items-center justify-center text-center px-6 py-12"
     >
-      <div>
-        <h1 className="text-5xl font-bold mb-6">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
           Run Every Shop Smarter
         </h1>
 
@@ -21,18 +21,16 @@ export default function Hero3D({ setDemoOpen }) {
           style={{
             transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`
           }}
-          className="w-[320px] h-[200px] mx-auto bg-white/20 backdrop-blur rounded-xl shadow-xl"
+          className="mx-auto max-w-md sm:max-w-xl bg-white/20 backdrop-blur rounded-xl shadow-xl p-6 sm:p-10"
         >
-            <p className="text-lg p-10 mb-8">
-                Inventory, offline POS, sales reports, low-stock alerts, team roles and receipts 
-                —
-                built for shopping complex tenants.
+            <p className="text-base sm:text-lg leading-relaxed text-gray-700 dark:text-gray-200">
+                Inventory, offline POS, sales reports, low-stock alerts, team roles and receipts — built for shopping complex tenants.
             </p>
         </div>
 
         <button
           onClick={() => setDemoOpen(true)}
-          className="mt-6 bg-emerald-500 px-6 py-3 text-white rounded"
+          className="mt-6 bg-emerald-500 px-6 py-3 text-white rounded-lg hover:bg-emerald-600 transition"
         >
           Watch Demo
         </button>

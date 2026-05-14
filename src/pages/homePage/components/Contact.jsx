@@ -90,7 +90,7 @@ Message sent successfully!
 </form>
 
 <div className="text-center mt-8">
-<a href="#signup" className="underline">
+<a href="/signup" className="underline">
 Or book a quick demo
 </a>
 </div>

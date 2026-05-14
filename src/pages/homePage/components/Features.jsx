@@ -77,7 +77,7 @@ className="bg-white/60 dark:bg-gray-800/60 backdrop-blur p-6 rounded-xl shadow h
 
 <div className="text-center mt-12">
 <a
-href="#signup"
+href="/signup"
 className="bg-emerald-500 px-6 py-3 rounded text-white shadow hover:scale-105"
 >
 Get Started Free – No Card Needed
