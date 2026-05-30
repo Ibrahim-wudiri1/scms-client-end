@@ -16,6 +16,11 @@ export const inventoryApi = {
         return res.data;
     },
 
+    stockIn: async (productId, quantity) => {
+        const res = await axiosClient.post(`/inventory/stock-in`, { productId, quantity });
+        return res.data;
+    },
+
     remove: async (id) => {
         const res = await axiosClient.delete(`/products/${id}`);
         return res.data;

@@ -83,7 +83,10 @@ export default function Pricing() {
             </div>
 
             <button
-              onClick={() => handleCheckout(plan.paystackPriceId)}
+              onClick={() =>{
+                window.location.href = "/signup";
+                // handleCheckout(plan.paystackPriceId)
+              } }
               disabled={loading === plan.paystackPriceId}
               className="bg-emerald-500 hover:bg-emerald-600 w-full text-white py-3 rounded-lg transition"
             >
