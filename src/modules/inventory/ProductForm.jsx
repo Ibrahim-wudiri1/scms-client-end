@@ -37,17 +37,22 @@ export default function ProductForm({ product, onSave, onClose }) {
     }
   }, [product, activeShop]);
 
-  // Fetch categories on mount
+  // Fetch categories once the active shop is available
   useEffect(() => {
-    fetchCategories();
-    // fetchShops();
-  }, []);
+    if (activeShop) {
+      fetchCategories();
+    }
+  }, [activeShop]);
 
   useEffect(() => {
     fetchShops();
   }, []);
 
   const fetchCategories = async () => {
+    if (!activeShop) {
+      return;
+    }
+
     try {
       setLoadingCategories(true);
       const res = await axiosClient.get(`/shops/${activeShop.id}/categories`);

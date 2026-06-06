@@ -5,6 +5,7 @@
 
 import initSqlJs from 'wa-sqlite/dist/wa-sqlite.mjs';
 import { Factory } from 'wa-sqlite';
+import wasmUrl from 'wa-sqlite/dist/wa-sqlite.wasm?url';
 import { setSqlite3 } from './dbManager';
 
 let db = null;
@@ -17,8 +18,11 @@ export async function initializeDatabase() {
   if (db) return db;
 
   try {
-    // Initialize wa-sqlite module
-    const Module = await initSqlJs();
+    // Initialize wa-sqlite module with explicit wasm URL
+    const Module = await initSqlJs({
+      locateFile: () => wasmUrl
+    });
+
     
     // Create SQLite API
     sqlite3 = Factory(Module);

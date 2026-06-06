@@ -14,21 +14,30 @@ export default function categoriesPage() {
   const [search, setSearch] = useState("");
 
   const loadCategories = async () => {
-    if (!activeShop) return;
+    if (!activeShop) {
+      console.warn("No active shop selected");
+      setLoading(false);
+      return;
+    }
+    
     try{
       const res = await axiosClient.get(`/shops/${activeShop.id}/categories`);
-      console.log("Categroy: ", res.data);
-      setCategories(res.data);
+      console.log("Category: ", res.data);
+      setCategories(res.data || []);
     }catch(err){
-      console.error(err);
-      alert(err.message);
+      console.error("Failed to fetch categories:", err);
+      alert(err.response?.data?.message || "Failed to fetch categories. Please try again.");
     }finally{
       setLoading(false);
     }
   };
 
   useEffect(()=>{
-    loadCategories();
+    if (activeShop) {
+      loadCategories();
+    } else {
+      setLoading(false);
+    }
   },[activeShop]);
 
   const filteredCategories = categories.filter((c)=>
