@@ -136,6 +136,7 @@ function InventoryList() {
                 <td className="p-3">{p.inventory?.currentQty || 0}</td>
                 <td className="p-3">{formatNaira(p.sellingPrice)}</td>
                 <td className="p-3 text-right relative">
+                  {/* 3 dot for menu */}
                   <button
                     onClick={() => openActionMenu(p.id)}
                     className="inventory-action-button inline-flex items-center justify-center w-10 h-10 rounded-full border text-gray-600 hover:bg-gray-100"

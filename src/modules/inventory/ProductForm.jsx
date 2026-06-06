@@ -50,7 +50,7 @@ export default function ProductForm({ product, onSave, onClose }) {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const res = await axiosClient.get("/category");
+      const res = await axiosClient.get(`/shops/${activeShop.id}/categories`);
       setCategories(res.data || []);
     } catch (err) {
       console.error("Failed to load categories:", err);
