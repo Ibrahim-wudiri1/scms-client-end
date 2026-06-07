@@ -3,7 +3,7 @@
  * Generic CRUD operations for offline database
  */
 
-import { getDatabase } from './dbInit';
+import { getDatabase } from './dbStore';
 
 // Get database instance
 let db = null;

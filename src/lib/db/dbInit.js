@@ -6,7 +6,7 @@
 import initSqlJs from 'wa-sqlite/dist/wa-sqlite.mjs';
 import { open } from 'wa-sqlite';
 import wasmUrl from 'wa-sqlite/dist/wa-sqlite.wasm?url';
-import { setDatabase } from './dbManager';
+import { setDatabase } from './dbStore';
 
 let db = null;
 let initPromise = null;
