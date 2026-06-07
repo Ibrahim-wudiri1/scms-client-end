@@ -5,11 +5,18 @@
 
 import { getDatabase } from './dbInit';
 
-// Get sqlite3 instance (assuming it's initialized)
-let sqlite3 = null;
+// Get database instance
+let db = null;
 
-export function setSqlite3(instance) {
-  sqlite3 = instance;
+export function setDatabase(database) {
+  db = database;
+  console.log('Database instance set:', !!db);
+}
+
+function ensureDbReady() {
+  if (!db) {
+    throw new Error('SQLite database not initialized. Call initializeDatabase() first.');
+  }
 }
 
 /**
@@ -20,7 +27,7 @@ export function generateId() {
 }
 
 export function insert(table, data) {
-  const db = getDatabase();
+  ensureDbReady();
   const columns = Object.keys(data);
   const values = Object.values(data);
   const placeholders = columns.map(() => '?').join(',');
@@ -28,10 +35,10 @@ export function insert(table, data) {
   const query = `INSERT INTO ${table} (${columns.join(',')}) VALUES (${placeholders})`;
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, values);
-    sqlite3.step(stmt);
-    sqlite3.finalize(stmt);
+    const stmt = db.prepare(query);
+    stmt.bind(values);
+    stmt.step();
+    stmt.free();
     return { success: true, id: data.id };
   } catch (error) {
     console.error(`✗ Insert into ${table} failed:`, error);
@@ -43,7 +50,7 @@ export function insert(table, data) {
  * Batch insert records
  */
 export function insertBatch(table, records) {
-  const db = getDatabase();
+  ensureDbReady();
   let successCount = 0;
   let failureCount = 0;
   const errors = [];
@@ -65,7 +72,7 @@ export function insertBatch(table, records) {
  * Update a record
  */
 export function update(table, id, data) {
-  const db = getDatabase();
+  ensureDbReady();
   const columns = Object.keys(data);
   const values = [...Object.values(data), id];
   const setClause = columns.map(col => `${col} = ?`).join(',');
@@ -73,10 +80,10 @@ export function update(table, id, data) {
   const query = `UPDATE ${table} SET ${setClause} WHERE id = ?`;
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, values);
-    sqlite3.step(stmt);
-    sqlite3.finalize(stmt);
+    const stmt = db.prepare(query);
+    stmt.bind(values);
+    stmt.step();
+    stmt.free();
     return { success: true };
   } catch (error) {
     console.error(`✗ Update in ${table} failed:`, error);
@@ -88,24 +95,20 @@ export function update(table, id, data) {
  * Get a single record by ID
  */
 export function findById(table, id) {
-  const db = getDatabase();
+  ensureDbReady();
   const query = `SELECT * FROM ${table} WHERE id = ?`;
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, [id]);
+    const stmt = db.prepare(query);
+    stmt.bind([id]);
     
-    if (sqlite3.step(stmt) === sqlite3.SQLITE_ROW) {
-      const row = {};
-      for (let i = 0; i < sqlite3.column_count(stmt); i++) {
-        const name = sqlite3.column_name(stmt, i);
-        row[name] = sqlite3.column(stmt, i);
-      }
-      sqlite3.finalize(stmt);
+    if (stmt.step()) {
+      const row = stmt.getAsObject();
+      stmt.free();
       return row;
     }
     
-    sqlite3.finalize(stmt);
+    stmt.free();
     return null;
   } catch (error) {
     console.error(`✗ Find in ${table} failed:`, error);
@@ -117,7 +120,7 @@ export function findById(table, id) {
  * Get all records from a table
  */
 export function findAll(table, limit = null, offset = 0) {
-  const db = getDatabase();
+  ensureDbReady();
   let query = `SELECT * FROM ${table}`;
 
   if (limit) {
@@ -125,19 +128,14 @@ export function findAll(table, limit = null, offset = 0) {
   }
 
   try {
-    const stmt = sqlite3.prepare(db, query);
+    const stmt = db.prepare(query);
     const rows = [];
     
-    while (sqlite3.step(stmt) === sqlite3.SQLITE_ROW) {
-      const row = {};
-      for (let i = 0; i < sqlite3.column_count(stmt); i++) {
-        const name = sqlite3.column_name(stmt, i);
-        row[name] = sqlite3.column(stmt, i);
-      }
-      rows.push(row);
+    while (stmt.step()) {
+      rows.push(stmt.getAsObject());
     }
     
-    sqlite3.finalize(stmt);
+    stmt.free();
     return rows;
   } catch (error) {
     console.error(`✗ FindAll in ${table} failed:`, error);
@@ -149,7 +147,7 @@ export function findAll(table, limit = null, offset = 0) {
  * Find records matching a condition
  */
 export function findWhere(table, conditions, limit = null) {
-  const db = getDatabase();
+  ensureDbReady();
   const whereClause = Object.keys(conditions)
     .map(key => `${key} = ?`)
     .join(' AND ');
@@ -161,20 +159,15 @@ export function findWhere(table, conditions, limit = null) {
   }
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, values);
+    const stmt = db.prepare(query);
+    stmt.bind(values);
     const rows = [];
     
-    while (sqlite3.step(stmt) === sqlite3.SQLITE_ROW) {
-      const row = {};
-      for (let i = 0; i < sqlite3.column_count(stmt); i++) {
-        const name = sqlite3.column_name(stmt, i);
-        row[name] = sqlite3.column(stmt, i);
-      }
-      rows.push(row);
+    while (stmt.step()) {
+      rows.push(stmt.getAsObject());
     }
     
-    sqlite3.finalize(stmt);
+    stmt.free();
     return rows;
   } catch (error) {
     console.error(`✗ FindWhere in ${table} failed:`, error);
@@ -186,14 +179,14 @@ export function findWhere(table, conditions, limit = null) {
  * Delete a record
  */
 export function deleteRecord(table, id) {
-  const db = getDatabase();
+  ensureDbReady();
   const query = `DELETE FROM ${table} WHERE id = ?`;
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, [id]);
-    sqlite3.step(stmt);
-    sqlite3.finalize(stmt);
+    const stmt = db.prepare(query);
+    stmt.bind([id]);
+    stmt.step();
+    stmt.free();
     return { success: true };
   } catch (error) {
     console.error(`✗ Delete from ${table} failed:`, error);
@@ -205,7 +198,7 @@ export function deleteRecord(table, id) {
  * Delete records matching a condition
  */
 export function deleteWhere(table, conditions) {
-  const db = getDatabase();
+  ensureDbReady();
   const whereClause = Object.keys(conditions)
     .map(key => `${key} = ?`)
     .join(' AND ');
@@ -214,10 +207,10 @@ export function deleteWhere(table, conditions) {
   const query = `DELETE FROM ${table} WHERE ${whereClause}`;
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, values);
-    sqlite3.step(stmt);
-    sqlite3.finalize(stmt);
+    const stmt = db.prepare(query);
+    stmt.bind(values);
+    stmt.step();
+    stmt.free();
     return { success: true };
   } catch (error) {
     console.error(`✗ DeleteWhere from ${table} failed:`, error);
@@ -229,7 +222,7 @@ export function deleteWhere(table, conditions) {
  * Count records matching a condition
  */
 export function count(table, conditions = null) {
-  const db = getDatabase();
+  ensureDbReady();
   let query = `SELECT COUNT(*) as count FROM ${table}`;
   let values = [];
 
@@ -242,16 +235,16 @@ export function count(table, conditions = null) {
   }
 
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, values);
+    const stmt = db.prepare(query);
+    stmt.bind(values);
     
-    if (sqlite3.step(stmt) === sqlite3.SQLITE_ROW) {
-      const result = sqlite3.column(stmt, 0);
-      sqlite3.finalize(stmt);
-      return result;
+    if (stmt.step()) {
+      const result = stmt.get()[0];
+      stmt.free();
+      return result || 0;
     }
     
-    sqlite3.finalize(stmt);
+    stmt.free();
     return 0;
   } catch (error) {
     console.error(`✗ Count in ${table} failed:`, error);
@@ -263,23 +256,18 @@ export function count(table, conditions = null) {
  * Execute a custom SQL query
  */
 export function execute(query, params = []) {
-  const db = getDatabase();
+  ensureDbReady();
   
   try {
-    const stmt = sqlite3.prepare(db, query);
-    sqlite3.bind_collection(stmt, params);
+    const stmt = db.prepare(query);
+    stmt.bind(params);
     const rows = [];
     
-    while (sqlite3.step(stmt) === sqlite3.SQLITE_ROW) {
-      const row = {};
-      for (let i = 0; i < sqlite3.column_count(stmt); i++) {
-        const name = sqlite3.column_name(stmt, i);
-        row[name] = sqlite3.column(stmt, i);
-      }
-      rows.push(row);
+    while (stmt.step()) {
+      rows.push(stmt.getAsObject());
     }
     
-    sqlite3.finalize(stmt);
+    stmt.free();
     return rows;
   } catch (error) {
     console.error('✗ Custom query execution failed:', error);
@@ -302,6 +290,7 @@ function rowToObject(columns, row) {
  * Get database statistics
  */
 export function getStats() {
+  ensureDbReady();
   const tables = [
     'products',
     'inventory',
@@ -323,25 +312,37 @@ export function getStats() {
 /**
  * Start a transaction (for batch operations)
  */
-export function beginTransaction() {
-  const db = getDatabase();
-  sqlite3.exec(db, 'BEGIN TRANSACTION');
+export async function beginTransaction() {
+  ensureDbReady();
+  try {
+    await db.run('BEGIN TRANSACTION');
+  } catch (error) {
+    console.error('Error beginning transaction:', error);
+  }
 }
 
 /**
  * Commit a transaction
  */
-export function commit() {
-  const db = getDatabase();
-  sqlite3.exec(db, 'COMMIT');
+export async function commit() {
+  ensureDbReady();
+  try {
+    await db.run('COMMIT');
+  } catch (error) {
+    console.error('Error committing transaction:', error);
+  }
 }
 
 /**
  * Rollback a transaction
  */
-export function rollback() {
-  const db = getDatabase();
-  sqlite3.exec(db, 'ROLLBACK');
+export async function rollback() {
+  ensureDbReady();
+  try {
+    await db.run('ROLLBACK');
+  } catch (error) {
+    console.error('Error rolling back transaction:', error);
+  }
 }
 
 /**
@@ -349,12 +350,12 @@ export function rollback() {
  */
 export async function transaction(callback) {
   try {
-    beginTransaction();
+    await beginTransaction();
     const result = await callback();
-    commit();
+    await commit();
     return result;
   } catch (error) {
-    rollback();
+    await rollback();
     throw error;
   }
 }
