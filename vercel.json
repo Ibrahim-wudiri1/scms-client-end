@@ -1,6 +1,18 @@
 {
   "rewrites": [
     {
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/vite.svg",
+      "destination": "/vite.svg"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/favicon.ico"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
