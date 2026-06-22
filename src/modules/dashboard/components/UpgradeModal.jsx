@@ -22,7 +22,7 @@ export default function UpgradeModal({ open, onClose }) {
     {
       id: "monthly",
       name: "Monthly",
-      price: "₦29,000",
+      price: "₦5,000",
       billingPeriod: "/month",
       planCode: "PLN_68pszny66jyelrp",
       features: [
@@ -37,12 +37,12 @@ export default function UpgradeModal({ open, onClose }) {
     {
       id: "yearly",
       name: "Yearly",
-      price: "₦290,000",
+      price: "₦50,000",
       billingPeriod: "/year",
       planCode: "PLN_xckemh2qcx82fq4",
       features: [
         "Everything in Monthly",
-        "20% discount (Save ₦58,000)",
+        "17% discount (Save ₦10,000)",
         "Priority support",
         "Advanced integrations",
         "Custom branding options",

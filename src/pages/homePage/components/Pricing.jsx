@@ -8,13 +8,13 @@ export default function Pricing() {
   const plans = [
     {
       name: "Monthly",
-      price: "₦29,000",
+      price: "₦5,000",
       period: "/mo",
       paystackPriceId: "PLN_68pszny66jyelrp", // 🔥 replace
     },
     {
       name: "Yearly",
-      price: "₦290,000",
+      price: "₦50,000",
       period: "/yr",
       popular: true,
       paystackPriceId: "PLN_xckemh2qcx82fq4", // 🔥 replace
